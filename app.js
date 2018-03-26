@@ -13,15 +13,26 @@ app.get('/', function(req, res){
   res.render('index', { title: 'Hey', message: 'Hello there!' })
 });
 
+var currentCavas;
+
 io.on('connection', function(socket){
 
 	console.log('a user connected');
 
-    socket.on('test_event', function(nickname){
+	// send canvas to new user
+	socket.emit('newPlayer', currentCavas);
+
+    socket.on('placePixel', function(event){
+
+        io.emit('drawPixel', event);
+        //socket.broadcast.emit('test', 'hoi broadcast emit');
         
-        socket.emit('test', 'hoi emit');
-        socket.broadcast.emit('test', 'hoi broadcast emit');
-        
+    });
+
+    socket.on('currentCanvas', function (canvas) {
+
+        currentCavas = canvas;
+        console.log(currentCavas)
     });
 
 
