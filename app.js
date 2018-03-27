@@ -1,8 +1,8 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var bodyParser = require('body-parser');
+let express = require('express');
+let app = express();
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
+let bodyParser = require('body-parser');
 
 app.set('view engine', 'hbs');
 
@@ -13,33 +13,36 @@ app.get('/', function(req, res){
   res.render('index', { title: 'Hey', message: 'Hello there!' })
 });
 
-var currentCavas;
+let currentCanvas;
 
 io.on('connection', function(socket){
-
+    // socket connects
 	console.log('a user connected');
 
-	// send canvas to new user
-    if(currentCavas != null){
-        socket.emit('newPlayer', currentCavas);
+    if(currentCanvas != null){
+        // send current state of canvas to new socket
+        socket.emit('new_player', currentCanvas);
     }
 
-    socket.on('placePixel', function(event){
+    // handle incoming place pixel events
+    socket.on('request_pixel_placement', function(event){
 
-        io.emit('drawPixel', event);
-        //socket.broadcast.emit('test', 'hoi broadcast emit');
-        
+        //todo: check if event is valid
+
+        // emit pixel placement event to all sockets
+        io.emit('draw_pixel', event);
     });
 
-    socket.on('currentCanvas', function (canvas) {
-
-        currentCavas = canvas;
-        console.log(currentCavas)
+    // handle incoming canvas update events
+    socket.on('current_canvas', function (canvas) {
+        //todo: make p2p style request canvas state method
+        // save canvas state on server
+        currentCanvas = canvas;
     });
 
 
     socket.on('disconnect', function(){
-
+        // socket disconnected
         console.log('user disconnected');
     });
 });
