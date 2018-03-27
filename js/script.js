@@ -4,8 +4,6 @@ let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 // ctx.webkitImageSmoothingEnabled = true;
 // ctx.imageSmoothingEnabled = true;
-//let imgData = ctx.createImageData(100, 100);
-let board = [];
 
 let colors = [
     {name: 'red', hexCode: '#f44336', light: false},
@@ -39,21 +37,6 @@ for (c of document.querySelectorAll('.colorButton')) {
     })
 }
 
-
-// for (var i = 0; i < imgData.data.length; i += 4) {
-
-// 	if(i % 8){
-
-//       imgData.data[i+0] = 0;
-//       imgData.data[i+1] = 255;
-//       imgData.data[i+2] = 0;
-//       imgData.data[i+3] = 255;
-//     }
-
-// }
-
-// ctx.putImageData(imgData, 0, 0);
-
 canvas.addEventListener('mousedown', function (event) {
     // get click coordinates
     let x = Math.floor(event.layerX / canvasScale);
@@ -63,7 +46,7 @@ canvas.addEventListener('mousedown', function (event) {
     let currentCanvas = ctx.getImageData(0, 0, 100, 100);
 
     socket.emit('placePixel', {x: x, y: y, color: color});
-    socket.emit('currentCanvas', currentCanvas);
+    socket.emit('currentCanvas', currentCanvas.data);
 
     // draw pixel on canvas
     /*ctx.fillStyle = color;
@@ -76,22 +59,24 @@ socket.on('drawPixel', function (event) {
     ctx.fillRect(event.x, event.y, 1, 1);
 });
 
-socket.on('newPlayer', function(canvas){
-    console.log(canvas);
+socket.on('newPlayer', function(canvasData){
+
     // place current state on board
-    let state = ctx.createImageData(100, 100)
+    //let state = ctx.createImageData(100, 100)
+
+    //console.log('dit', state)
 
     let fuckingHell = []
 
-    for(data in canvas.data){
-        fuckingHell.push(canvas.data[data])
+    for(index in canvasData){
+        fuckingHell.push(canvasData[index])
     }
 
     console.log('bullshit', fuckingHell)
 
 
+    let state = new ImageData(Uint8ClampedArray.from(fuckingHell), 100, 100)
 
-    state.data = Uint8ClampedArray.from(fuckingHell)
-    console.log(state)
+    console.log(state.data)
     ctx.putImageData(state, 0, 0);
 });

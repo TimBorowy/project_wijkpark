@@ -20,7 +20,9 @@ io.on('connection', function(socket){
 	console.log('a user connected');
 
 	// send canvas to new user
-	socket.emit('newPlayer', currentCavas);
+    if(currentCavas != null){
+        socket.emit('newPlayer', currentCavas);
+    }
 
     socket.on('placePixel', function(event){
 
