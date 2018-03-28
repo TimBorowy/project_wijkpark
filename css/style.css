@@ -33,6 +33,22 @@ canvas {
     color: #FFF;
     font-weight: bold;
 }
+
+#errorContainer {
+    display: none;
+    background: #f44336;
+    border: 2px solid #FFF;
+    margin: 20px 0;
+    border-radius: 5px;
+    padding: 10px;
+}
+#errorContainer p {
+    font-size: 1.1em;
+    text-align: center;
+}
+#errorMessageHelper {
+    font-style: italic;
+}
 .intro{
     width: auto;
     height: auto;

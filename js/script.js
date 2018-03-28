@@ -3,13 +3,13 @@
 * */
 
 // connect to wss
-let socket = io();
+const socket = io({reconnectionAttempts: 7});
 
 // handle successful socket connection
 socket.on('connect', function (connection) {
     console.log('Connection made/restored');
 
-    //todo: remove connection error message
+    document.getElementById('errorContainer').style.display = 'none';
 });
 
 // handle incoming draw pixel event
@@ -48,6 +48,9 @@ socket.on('connect_error', function (err) {
     console.log('Socket connection error');
 
     //todo: show connection error message
+    document.getElementById('errorContainer').style.display = 'block';
+
+
 });
 
 // handle wss reconnection error
@@ -55,6 +58,8 @@ socket.on('reconnect_error', function (err) {
     console.log('Socket reconnection error');
 
     //todo: show connection error message
+    document.getElementById('errorContainer').style.display = 'block';
+
 });
 
 
