@@ -1,6 +1,6 @@
 body {
     height: auto;
-    background: #222222;
+    background-image: url("../img/r-place.jpg");
     color: #efefef;
     font-family: sans-serif;
 }
@@ -8,6 +8,7 @@ body {
 canvas {
     image-rendering: pixelated;
     background: #FFF;
+    width: auto;
 }
 
 #container {
@@ -47,4 +48,8 @@ canvas {
 }
 #errorMessageHelper {
     font-style: italic;
+}
+.intro{
+    width: auto;
+    height: auto;
 }
