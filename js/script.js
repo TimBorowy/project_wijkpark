@@ -66,7 +66,7 @@ let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 // ctx.webkitImageSmoothingEnabled = true;
 // ctx.imageSmoothingEnabled = true;
-
+console.log("test");
 
 // available colors
 let colors = [
