@@ -1,12 +1,74 @@
-var socket = io();
+/*
+* Web sockets
+* */
+
+// connect to wss
+let socket = io();
+
+// handle successful socket connection
+socket.on('connect', function (connection) {
+    console.log('Connection made/restored');
+
+    //todo: remove connection error message
+});
+
+// handle incoming draw pixel event
+socket.on('draw_pixel', function (event) {
+    console.log(event)
+
+    // draw pixel on canvas
+    ctx.fillStyle = event.color;
+    ctx.fillRect(event.x, event.y, 1, 1);
+
+    // get current state of canvas
+    let currentCanvas = ctx.getImageData(0, 0, 100, 100);
+    socket.emit('current_canvas', currentCanvas.data);
+});
+
+socket.on('new_player', function (canvasData) {
+
+    let fuckingHell = []
+
+    // make array of object
+    for (let index in canvasData) {
+        fuckingHell.push(canvasData[index])
+    }
+
+    console.log('bullshit', fuckingHell)
+
+    // create new image data instance with available canvas state
+    let state = new ImageData(Uint8ClampedArray.from(fuckingHell), 100, 100)
+
+    // place current state on board
+    ctx.putImageData(state, 0, 0);
+});
+
+// handle wss connection error
+socket.on('connect_error', function (err) {
+    console.log('Socket connection error');
+
+    //todo: show connection error message
+});
+
+// handle wss reconnection error
+socket.on('reconnect_error', function (err) {
+    console.log('Socket reconnection error');
+
+    //todo: show connection error message
+});
+
+
+/*
+* Game
+* */
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 // ctx.webkitImageSmoothingEnabled = true;
 // ctx.imageSmoothingEnabled = true;
-let imgData = ctx.createImageData(100, 100);
-let board = [];
-let color = 'blue'
+
+
+// available colors
 let colors = [
     {name: 'red', hexCode: '#f44336', light: false},
     {name: 'blue', hexCode: '#2196f3', light: false},
@@ -17,48 +79,40 @@ let colors = [
     {name: 'black', hexCode: '#000', light: false},
     {name: 'white', hexCode: '#FFF', light: true}
 ];
-let canvasScale = 7
+// set initial color
+let selectedColor = colors[0];
+// canvas zoom level
+let canvasScale = 7;
 
-for (col of colors) {
+
+// create color selection buttons
+for (let color of colors) {
+
     let button = document.createElement('button');
-    button.innerHTML = col.name;
+    button.innerHTML = color.name;
     button.classList.add("colorButton");
-    button.style.backgroundColor = col.hexCode;
-    if (col.light) {
+    button.style.backgroundColor = color.hexCode;
+
+    if (color.light) {
         button.style.color = '#2e2e2e';
     }
 
     document.querySelector('#colors').appendChild(button)
 }
 
-for (c of document.querySelectorAll('.colorButton')) {
-    c.addEventListener('click', function (e) {
-        color = this.style.backgroundColor;
-        console.log(color)
+// add event listeners to those buttons
+for (let colorButton of document.querySelectorAll('.colorButton')) {
+    colorButton.addEventListener('click', function (e) {
+        selectedColor = this.style.backgroundColor;
+        console.log(selectedColor)
     })
 }
 
-
-// for (var i = 0; i < imgData.data.length; i += 4) {
-
-// 	if(i % 8){
-
-//       imgData.data[i+0] = 0;
-//       imgData.data[i+1] = 255;
-//       imgData.data[i+2] = 0;
-//       imgData.data[i+3] = 255;
-//     }
-
-// }
-
-// ctx.putImageData(imgData, 0, 0);
-
 canvas.addEventListener('mousedown', function (event) {
-    // get click coordinates
+    // get scaled click coordinates
     let x = Math.floor(event.layerX / canvasScale);
     let y = Math.floor(event.layerY / canvasScale);
 
-    // draw pixel on canvas
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, 1, 1);
+    socket.emit('request_pixel_placement', {x: x, y: y, color: selectedColor});
 });
+
