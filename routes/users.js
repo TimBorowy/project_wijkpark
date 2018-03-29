@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
+
 // Bring in User Models
 let User = require('../models/user');
 
@@ -24,6 +26,7 @@ router.post('/register', function(req, res){
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
   let errors = req.validationErrors();
+  console.log(errors);
   if(errors){
     res.render('register', {
       errors:errors
@@ -47,11 +50,26 @@ router.post('/register', function(req, res){
             console.log(err);
             return;
           } else {
-            console.log("finished");
+              req.flash('You are registered and logged in');
+              res.redirect('../pixel');
           }
         });
       });
     });
   }
+});
+
+// Login Form
+router.get('/login', function(req, res){
+ res.render('login', { messages: req.flash('error') });
+});
+
+// Login process
+router.post('/login', function(req, res, next){
+  passport.authenticate('local', {
+    successRedirect: '/pixel',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next);
 });
 module.exports = router;
