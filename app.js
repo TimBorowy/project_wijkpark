@@ -71,23 +71,6 @@ app.get('/users/register', function(req, res) {
     }
   });
 });
-// Add Submit Post Route
-app.post('/users/register', function(req, res) {
-  let user = new User();
-  user.name = req.body.name;
-  user.email = req.body.email;
-  user.username = req.body.username;
-  user.password = req.body.password;
-
-  user.save(function(err) {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.redirect('/');
-    }
-  });
-  return;
 
 app.get('/pixel', function(req, res){
     res.render('index', { title: 'Hey', message: 'Hello there!' })

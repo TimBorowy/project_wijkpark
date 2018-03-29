@@ -48,6 +48,7 @@ router.post('/register', function(req, res){
             return;
           } else {
             console.log("finished");
+            res.redirect('../pixel');
           }
         });
       });
