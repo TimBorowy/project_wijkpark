@@ -26,7 +26,7 @@ router.post('/register', function(req, res){
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
   let errors = req.validationErrors();
-  console.log(errors);
+
   if(errors){
     res.render('register', {
       errors:errors
@@ -72,4 +72,11 @@ router.post('/login', function(req, res, next){
     failureFlash: true
   })(req, res, next);
 });
+// logout
+router.get('/logout', function(req, res){
+  req.logout();
+  req.flash('success', 'You are logged out');
+  res.redirect('/users/login');
+});
+
 module.exports = router;
