@@ -62,10 +62,29 @@ socket.on('reconnect_error', function (err) {
 
 });
 
+/*
+* Layout
+* */
+
+
+window.addEventListener('load', sizeLayouts)
+window.addEventListener('resize', sizeLayouts)
+
+function sizeLayouts() {
+
+    let footer = document.getElementById('color-footer').offsetHeight
+    let header = document.getElementById('title-header').offsetHeight
+
+    let heightResult = screen.availHeight - header - footer;
+
+    document.getElementById('canvas-container').style.height = heightResult+'px'
+}
+
 
 /*
 * Game
 * */
+
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
@@ -120,4 +139,26 @@ canvas.addEventListener('mousedown', function (event) {
 
     socket.emit('request_pixel_placement', {x: x, y: y, color: selectedColor});
 });
+
+document.addEventListener('keydown', function (event) {
+    console.log(event.keyCode)
+    //console.log(canvas.style.top)
+
+    switch (event.keyCode){
+        case 38: //up
+            canvas.style.top = parseInt(canvas.style.top, 10) - 20 + 'px'
+            break;
+        case 40: //down
+            canvas.style.top = parseInt(canvas.style.top, 10) + 20 + 'px'
+            break;
+        case 37: //left
+            console.log(canvas.style.left)
+            canvas.style.left = parseInt(canvas.style.left, 10) - 20 + 'px'
+            break;
+        case 39: //right
+            console.log(parseInt(canvas.style.left, 10))
+            canvas.style.left = parseInt(canvas.style.left, 10) + 20 + 'px'
+            break;
+    }
+})
 

@@ -1,6 +1,8 @@
 body {
+    margin: 0;
     height: auto;
-    background-image: url("../img/r-place.jpg");
+    //background-image: url("../img/r-place.jpg");
+    background-color: rgba(30, 39, 64, 0.8);
     color: #efefef;
     font-family: sans-serif;
 }
@@ -9,27 +11,43 @@ canvas {
     image-rendering: pixelated;
     background: #FFF;
     width: auto;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
 
-#container {
-    height: 700px;
+header{
+    padding: 10px;
+
+}
+header h1{
+    margin: 0 0 20px 0;
+}
+
+#canvas-container {
     width: 100%;
+    overflow: hidden;
 }
 
 .zoom {
     transform: scale(7);
     transform-origin: left top;
 }
-
+.colorContainer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 #colors {
-    margin: 30px 0;
+    padding: 10px 0;
 }
 
 .colorButton {
     border: none;
     padding: 10px;
     border-radius: 5px;
-    margin: 0 5px;
+    margin: 0 5px 5px 5px;
     color: #FFF;
     font-weight: bold;
 }
