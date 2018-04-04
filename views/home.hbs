@@ -3,17 +3,41 @@
 <head>
 	<title>{{title}}</title>
 	<link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-	<h1>Hallo world </h1>
-	<div class='intro'>
-    <!--<img src="../img/r-place.jpg" alt="r-place">-->
-	 <p>
+<body class="homepage">
+<div class="transbox">
+    <div>
+        <a id="myBtn">
+        <img src="../img/info.png" class="infobutton">
+        </a>
+    </div>
+    <div id="myModal" class="modal">
 
-	 </p>
-	 </div>
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p>
+        </div>
+
+    </div>
+    <h1> PixelPlacer </h1>
+    <p>
+        Op deze app is het mogelijk om me eigen artistieke kunstzinnigheid te uiten op een Gigantisch scherm tekenen. Wie wil dat nou niet!!!!
+    </p>
+    <div id="flexcontainer">
+    <a href="pixel" class="homebutton" >
+        login as guest
+    </a>
+    <a href="#" class="homebutton" >
+        Login
+    </a>
+
+    </div>
+</div>
 
 </body>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/script.js"></script>
+<script src="/js/infoPopup.js"></script>
+<!--<script src="/js/script.js"></script>-->
 </html>

@@ -30,13 +30,12 @@ let db = mongoose.connection;
 db.once('open', function() {
   console.log('Connected to MongoDB');
 });
-db.on('error', function(err){
+db.on('error', function(err) {
   console.log(err);
 });
 
 // Bring in Models
 let User = require('./models/user');
-
 // Load View Engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -47,7 +46,10 @@ app.use('/img', express.static(__dirname + '/img'));
 
 // Body Parser Middleware
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+
 // parse application/json
 app.use(bodyParser.json())
 
@@ -97,11 +99,15 @@ app.get('*', function(req, res, next){
 
 // index View
 app.get('/', function(req, res){
-    res.render('home')
+    res.render('home', {title: 'Project Wijkpark, an interactive project'})
 });
 
-app.get('/pixel', function(req, res, next){
-    res.render('index', { title: 'Hey', message: 'Welcome '})
+app.get('/pixel', function(req, res){
+    res.render('pixel-place', { title: 'Place your pixels', message: 'Hello there!' })
+});
+
+app.get('/pixel/view', function (req, res) {
+    res.render('pixel-view', {title: 'Canvas overview'})
 });
 
 let currentCanvas;

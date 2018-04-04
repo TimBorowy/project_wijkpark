@@ -1,61 +1,20 @@
 /*
-* Web sockets
+* Layout
 * */
 
-// connect to wss
-let socket = io();
+window.addEventListener('load', sizeLayouts)
+window.addEventListener('resize', sizeLayouts)
 
-// handle successful socket connection
-socket.on('connect', function (connection) {
-    console.log('Connection made/restored');
+// base layout sizes on screen resolution
+function sizeLayouts() {
 
-    //todo: remove connection error message
-});
+    let footer = document.getElementById('color-footer').offsetHeight
+    let header = document.getElementById('title-header').offsetHeight
 
-// handle incoming draw pixel event
-socket.on('draw_pixel', function (event) {
-    console.log(event)
+    let heightResult = screen.availHeight - header - footer;
 
-    // draw pixel on canvas
-    ctx.fillStyle = event.color;
-    ctx.fillRect(event.x, event.y, 1, 1);
-
-    // get current state of canvas
-    let currentCanvas = ctx.getImageData(0, 0, 100, 100);
-    socket.emit('current_canvas', currentCanvas.data);
-});
-
-socket.on('new_player', function (canvasData) {
-
-    let fuckingHell = []
-
-    // make array of object
-    for (let index in canvasData) {
-        fuckingHell.push(canvasData[index])
-    }
-
-    console.log('bullshit', fuckingHell)
-
-    // create new image data instance with available canvas state
-    let state = new ImageData(Uint8ClampedArray.from(fuckingHell), 100, 100)
-
-    // place current state on board
-    ctx.putImageData(state, 0, 0);
-});
-
-// handle wss connection error
-socket.on('connect_error', function (err) {
-    console.log('Socket connection error');
-
-    //todo: show connection error message
-});
-
-// handle wss reconnection error
-socket.on('reconnect_error', function (err) {
-    console.log('Socket reconnection error');
-
-    //todo: show connection error message
-});
+    document.getElementById('canvas-container').style.height = heightResult + 'px'
+}
 
 
 /*
@@ -64,9 +23,6 @@ socket.on('reconnect_error', function (err) {
 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-// ctx.webkitImageSmoothingEnabled = true;
-// ctx.imageSmoothingEnabled = true;
-
 
 // available colors
 let colors = [
@@ -83,6 +39,8 @@ let colors = [
 let selectedColor = colors[0];
 // canvas zoom level
 let canvasScale = 7;
+// amount of initial pixels you can place
+let pixels = 5;
 
 
 // create color selection buttons
@@ -108,11 +66,104 @@ for (let colorButton of document.querySelectorAll('.colorButton')) {
     })
 }
 
+// initialize qr code scanner
+let scanner = new Instascan.Scanner({video: document.getElementById('preview')});
+
+// listen for successful scans
+scanner.addListener('scan', function (content) {
+    console.log(content);
+    pixels = +5
+    console.log(pixels)
+
+    closeScanner()
+});
+
+
+// listen for a click on the canvas
 canvas.addEventListener('mousedown', function (event) {
     // get scaled click coordinates
     let x = Math.floor(event.layerX / canvasScale);
     let y = Math.floor(event.layerY / canvasScale);
 
-    socket.emit('request_pixel_placement', {x: x, y: y, color: selectedColor});
+    if (pixels !== 0) {
+
+        socket.emit('request_pixel_placement', {x: x, y: y, color: selectedColor});
+        pixels--
+        console.log(pixels)
+
+        if (pixels == 0) {
+            alert('je pixels zijn op! Open de scanner. ')
+        }
+    }
 });
 
+document.getElementById('findQRCodes').addEventListener('click', launchCameraHandler)
+document.getElementById('closeScanner').addEventListener('click', closeScanner)
+
+// launch camera and view
+function launchCameraHandler(e) {
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+        } else {
+            console.error('No cameras found.');
+        }
+    }).catch(function (e) {
+        console.error(e);
+    });
+
+    document.getElementById('pixelView').style.display = 'none'
+    document.getElementById('codeReader').style.display = 'block'
+}
+
+// close scanner and close view
+function closeScanner() {
+    scanner.stop()
+        .then(function () {
+            document.getElementById('codeReader').style.display = 'none'
+            document.getElementById('pixelView').style.display = 'block'
+        })
+}
+
+// move canvas around with the arrow keys
+document.addEventListener('keydown', function (event) {
+
+    switch (event.keyCode) {
+        case 38: //up
+            canvas.style.top = parseInt(canvas.style.top, 10) - 20 + 'px'
+            break;
+        case 40: //down
+            canvas.style.top = parseInt(canvas.style.top, 10) + 20 + 'px'
+            break;
+        case 37: //left
+            console.log(canvas.style.left)
+            canvas.style.left = parseInt(canvas.style.left, 10) - 20 + 'px'
+            break;
+        case 39: //right
+            console.log(parseInt(canvas.style.left, 10))
+            canvas.style.left = parseInt(canvas.style.left, 10) + 20 + 'px'
+            break;
+    }
+});
+
+// move canvas around with touch movements
+{
+    let start = {x: '', y: '', elemX: '', elemY: ''}
+    let moveX
+    let moveY
+
+    document.addEventListener('touchstart', function (e) {
+        start.x = e.touches[0].clientX
+        start.y = e.touches[0].clientY
+        start.elemX = parseInt(canvas.style.left, 10)
+        start.elemY = parseInt(canvas.style.top, 10)
+    })
+
+    document.addEventListener('touchmove', function (e) {
+        moveX = e.touches[0].clientX
+        moveY = e.touches[0].clientY
+
+        canvas.style.left = start.elemX - (start.x - moveX) + 'px'
+        canvas.style.top = start.elemY - (start.y - moveY) + 'px'
+    })
+}
