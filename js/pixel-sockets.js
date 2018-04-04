@@ -14,7 +14,7 @@ socket.on('connect', function (connection) {
 
 // handle incoming draw pixel event
 socket.on('draw_pixel', function (event) {
-    console.log(event)
+    //console.log(event)
 
     // draw pixel on canvas
     ctx.fillStyle = event.color;
