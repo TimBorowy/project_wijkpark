@@ -160,7 +160,7 @@ div.transbox p {
     color: #000;
     text-decoration: none;
     cursor: pointer;
-
+}
 #errorContainer {
     display: none;
     background: #f44336;
@@ -191,4 +191,7 @@ div.transbox p {
     color: #FFF;
     font-weight: bold;
     background: #00bcd4;
+}
+.wallView{
+    height: 100%;
 }
