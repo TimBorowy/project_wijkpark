@@ -192,3 +192,6 @@ div.transbox p {
     font-weight: bold;
     background: #00bcd4;
 }
+.wallView{
+    height: 100%;
+}
