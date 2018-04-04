@@ -1,4 +1,5 @@
 body {
+    margin: 0;
     height: auto;
     background: #222222;
     color: #efefef;
@@ -8,27 +9,45 @@ body {
 canvas {
     image-rendering: pixelated;
     background: #FFF;
+    width: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
-#container {
-    height: 700px;
+header{
+    padding: 10px;
+
+}
+header h1{
+    margin: 0 0 20px 0;
+}
+
+#canvas-container {
     width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .zoom {
     transform: scale(7);
     transform-origin: left top;
 }
-
+.colorContainer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 #colors {
-    margin: 30px 0;
+    padding: 10px 0;
 }
 
 .colorButton {
     border: none;
     padding: 10px;
     border-radius: 5px;
-    margin: 0 5px;
+    margin: 0 5px 5px 5px;
     color: #FFF;
     font-weight: bold;
 }
@@ -141,4 +160,35 @@ div.transbox p {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+
+#errorContainer {
+    display: none;
+    background: #f44336;
+    border: 2px solid #FFF;
+    margin: 20px 0;
+    border-radius: 5px;
+    padding: 10px;
+}
+#errorContainer p {
+    font-size: 1.1em;
+    text-align: center;
+}
+#errorMessageHelper {
+    font-style: italic;
+}
+
+#codeReader{
+    display: none;
+}
+
+.btn{
+    font-size: 1em;
+    text-decoration: none;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 0 5px 5px 5px;
+    color: #FFF;
+    font-weight: bold;
+    background: #00bcd4;
 }
