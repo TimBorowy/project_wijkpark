@@ -38,7 +38,7 @@ let colors = [
 // set initial color
 let selectedColor = colors[0];
 // canvas zoom level
-let canvasScale = 9;
+let canvasScale = 8;
 // amount of initial pixels you can place
 let pixels = 5;
 
@@ -74,10 +74,16 @@ let scanner = new Instascan.Scanner({video: document.getElementById('preview'), 
 // listen for successful scans
 scanner.addListener('scan', function (content) {
     console.log(content);
-    pixels = +5
-    console.log(pixels)
 
-    closeScanner()
+    // check if qr code is valid
+    if(content == "park_pole1"){
+        pixels +=5
+        console.log(pixels)
+
+        closeScanner()
+    } else{
+        alert('QR code niet geldig')
+    }
 });
 
 

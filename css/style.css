@@ -8,6 +8,10 @@ body {
 
 canvas {
     image-rendering: pixelated;
+    image-rendering: -moz-pixelated;
+    image-rendering: -o-pixelated;
+    image-rendering: -webkit-pixelated;
+    image-rendering: -o-pixelated;
     background: #FFF;
     width: auto;
     position: absolute;
