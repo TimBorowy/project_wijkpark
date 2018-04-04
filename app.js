@@ -56,8 +56,10 @@ app.use(expressValidator({
 
 // index View
 app.get('/', function(req, res) {
-    res.render('home')
+    res.render('home', {title: 'Project Wijkpark, an interactive project'})
 });
+
+
 // Register View
 app.get('/users/register', function(req, res) {
   User.find({}, function(err, users) {
@@ -71,26 +73,13 @@ app.get('/users/register', function(req, res) {
     }
   });
 });
-// Add Submit Post Route
-app.post('/users/register', function(req, res) {
-  let user = new User();
-  user.name = req.body.name;
-  user.email = req.body.email;
-  user.username = req.body.username;
-  user.password = req.body.password;
-
-  user.save(function(err) {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.redirect('/');
-    }
-  });
-  return;
 
 app.get('/pixel', function(req, res){
-    res.render('index', { title: 'Hey', message: 'Hello there!' })
+    res.render('pixel-place', { title: 'Place your pixels', message: 'Hello there!' })
+});
+
+app.get('/pixel/view', function (req, res) {
+    res.render('pixel-view', {title: 'Canvas overview'})
 });
 
 let currentCanvas;

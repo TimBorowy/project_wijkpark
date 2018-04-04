@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{title}}</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="pixelView">
+        <header id="title-header">
+            <a href="/" class="btn" >Terug</a>
+            <button class="btn" id="findQRCodes">Open scanner</button>
+        </header>
+
+        <div id="errorContainer">
+            <p id="errorMessage">We're having some trouble connecting to the realtime server, hang on..</p>
+            <p id="errorMessageHelper">If this problem is not resolved in a few seconds, try reloading this page.</p>
+        </div>
+
+        <div id='canvas-container'>
+            <canvas id="myCanvas" class="zoom" width="100" height="100" style="position: absolute; left: 0; top: 0"></canvas>
+        </div>
+        <div id="color-footer" class="colorContainer">
+            <div id="colors"></div>
+        </div>
+    </div>
+    <div id="codeReader">
+        <video id="preview"></video>
+        <button class="btn" id="closeScanner">Close scanner</button>
+    </div>
+
+</body>
+<script src="/js/instascan.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/pixel-sockets.js"></script>
+</html>
