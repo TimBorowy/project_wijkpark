@@ -1,11 +1,28 @@
 const express = require('express');
-const app = express();
 const path = require('path');
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
+MongoClient.connect(url, function(err, db){
+  if (err) throw err;
+  var dbo = db.db("project_wijkpark");
+  //Create a collection name "customers":
+  dbo.createCollection("users", function(err, res){
+    if (err) throw err;
+    console.log("Collection created!");
+    db.close();
+  });
+});
 
 // Connect to db and check for errors
 mongoose.connect('mongodb://localhost/project_wijkpark');
@@ -36,9 +53,24 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
+// Express Session MiddleWare
+var sessionStore = new session.MemoryStore;
+app.use(session({
+  store: sessionStore,
+  secret: 'wijkpark',
+  resave: true,
+  saveUninitialized: true
+}));
+
+// Express Messages Middleware
+app.use(require('connect-flash')());
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 // Express Validator Middleware
 app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
+  errorFormatter: function(param, msg, value){
       var namespace = param.split('.')
       , root    = namespace.shift()
       , formParam = root;
@@ -54,24 +86,20 @@ app.use(expressValidator({
   }
 }));
 
-// index View
-app.get('/', function(req, res) {
-    res.render('home', {title: 'Project Wijkpark, an interactive project'})
+// Passport config
+require('./config/passport')(passport);
+// Passport MiddleWare
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('*', function(req, res, next){
+  res.locals.user = req.user || null;
+  next();
 });
 
-
-// Register View
-app.get('/users/register', function(req, res) {
-  User.find({}, function(err, users) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('user_registration', {
-        title: 'Registration',
-        users: users
-      });
-    }
-  });
+// index View
+app.get('/', function(req, res){
+    res.render('home', {title: 'Project Wijkpark, an interactive project'})
 });
 
 app.get('/pixel', function(req, res){
@@ -103,7 +131,7 @@ io.on('connection', function(socket){
     });
 
     // handle incoming canvas update events
-    socket.on('current_canvas', function (canvas) {
+    socket.on('current_canvas', function (canvas){
         //todo: make p2p style request canvas state method
         // save canvas state on server
         currentCanvas = canvas;
