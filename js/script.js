@@ -77,7 +77,7 @@ scanner.addListener('scan', function (content) {
 
     // check if qr code is valid
     if(content == "park_pole1"){
-        pixels = +5
+        pixels +=5
         console.log(pixels)
 
         closeScanner()
