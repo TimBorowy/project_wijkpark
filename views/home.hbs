@@ -22,9 +22,12 @@
 
     </div>
     <h1> PixelPlacer </h1>
-    <p>
-        Op deze app is het mogelijk om me eigen artistieke kunstzinnigheid te uiten op een Gigantisch scherm tekenen. Wie wil dat nou niet!!!!
-    </p>
+    <div class="mainBox">
+        <p>
+            Op deze app is het mogelijk om me eigen artistieke kunstzinnigheid te uiten op een Gigantisch scherm tekenen. Wie wil dat nou niet!!!!
+        </p>
+        <img id="lolMeme" src="" alt="">
+    </div>
     <div id="flexcontainer">
     <a href="pixel" class="homebutton" >
         login as guest
@@ -39,5 +42,26 @@
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/infoPopup.js"></script>
-<!--<script src="/js/script.js"></script>-->
+<script >
+    const GIPHY_API = 'd7wj94m6tsUKl4TDzcOmLwiqxiMqogqg'
+    let url = "http://api.giphy.com/v1/gifs/random?tag=meme&api_key="+GIPHY_API;
+    fetch(url)
+            .then(response => response.json())
+            .then(data => successHandler(data))
+            .catch(error => errorHandler(error))
+
+    function successHandler(data) {
+        console.log(data);
+        placeMeme(data)
+    }
+
+    function errorHandler(error) {
+        console.log('dit gaat mis ', error);
+    }
+
+    function placeMeme(data) {
+        let img = document.getElementById('lolMeme')
+        img.src = data.data.image_url
+    }
+</script>
 </html>

@@ -38,10 +38,12 @@ let colors = [
 // set initial color
 let selectedColor = colors[0];
 // canvas zoom level
-let canvasScale = 7;
+let canvasScale = 9;
 // amount of initial pixels you can place
 let pixels = 5;
 
+canvas.style.transform = 'scale('+ canvasScale+')'
+canvas.style.transformOrigin = 'left top'
 
 // create color selection buttons
 for (let color of colors) {
@@ -67,7 +69,7 @@ for (let colorButton of document.querySelectorAll('.colorButton')) {
 }
 
 // initialize qr code scanner
-let scanner = new Instascan.Scanner({video: document.getElementById('preview')});
+let scanner = new Instascan.Scanner({video: document.getElementById('preview'), mirror: false,});
 
 // listen for successful scans
 scanner.addListener('scan', function (content) {
@@ -104,7 +106,12 @@ document.getElementById('closeScanner').addEventListener('click', closeScanner)
 function launchCameraHandler(e) {
     Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {
-            scanner.start(cameras[0]);
+            if(cameras[1]){
+                scanner.start(cameras[1]);
+            } else{
+                scanner.start(cameras[0]);
+            }
+
         } else {
             console.error('No cameras found.');
         }

@@ -30,8 +30,8 @@ header h1{
 }
 
 .zoom {
-    transform: scale(7);
-    transform-origin: left top;
+    //transform: scale(7);
+    //transform-origin: left top;
 }
 .colorContainer{
     position: absolute;
@@ -84,7 +84,7 @@ div.transbox h1 {
 div.transbox p {
     text-align: center;
     color: #000000;
-    margin: 200px 20px;
+    margin: 100px 20px 30px 20px;
 }
 
 .homebutton{
@@ -194,4 +194,8 @@ div.transbox p {
 }
 .wallView{
     height: 100%;
+}
+
+#lolMeme{
+    width: 100%;
 }
