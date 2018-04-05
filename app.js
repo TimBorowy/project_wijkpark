@@ -104,11 +104,11 @@ app.get('/', function(req, res){
 });
 
 app.get('/pixel', function(req, res){
-    res.render('pixel-place', { title: 'Place your pixels', message: 'Hello there!' })
+    res.render('pixel/modify', { title: 'Place your pixels', message: 'Hello there!' })
 });
 
 app.get('/pixel/view', function (req, res) {
-    res.render('pixel-view', {title: 'Canvas overview'})
+    res.render('pixel/view', {title: 'Canvas overview'})
 });
 
 let currentCanvas;

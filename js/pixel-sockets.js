@@ -8,13 +8,12 @@ const socket = io({reconnectionAttempts: 7});
 // handle successful socket connection
 socket.on('connect', function (connection) {
     console.log('Connection made/restored');
-
+    // hide connection error box
     document.getElementById('errorContainer').style.display = 'none';
 });
 
 // handle incoming draw pixel event
 socket.on('draw_pixel', function (event) {
-    //console.log(event)
 
     // draw pixel on canvas
     ctx.fillStyle = event.color;
@@ -22,6 +21,7 @@ socket.on('draw_pixel', function (event) {
 
     // get current state of canvas
     let currentCanvas = ctx.getImageData(0, 0, 100, 100);
+    // emit state to server
     socket.emit('current_canvas', currentCanvas.data);
 });
 
@@ -34,9 +34,9 @@ socket.on('new_player', function (canvasData) {
         fuckingHell.push(canvasData[index])
     }
 
-    console.log('bullshit', fuckingHell)
-
     // create new image data instance with available canvas state
+    // this took way to much time to figure out ctx.createImageData creates an instance of imagedata with protected properties
+    // so I needed to set the properties when creating a new instance
     let state = new ImageData(Uint8ClampedArray.from(fuckingHell), 100, 100)
 
     // place current state on board
@@ -47,17 +47,14 @@ socket.on('new_player', function (canvasData) {
 socket.on('connect_error', function (err) {
     console.log('Socket connection error');
 
-    //todo: show connection error message
+    // show connection error box
     document.getElementById('errorContainer').style.display = 'block';
-
-
 });
 
 // handle wss reconnection error
 socket.on('reconnect_error', function (err) {
     console.log('Socket reconnection error');
 
-    //todo: show connection error message
+    // show connection error box
     document.getElementById('errorContainer').style.display = 'block';
-
 });

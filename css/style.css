@@ -1,7 +1,10 @@
+*{
+    box-sizing: border-box;
+}
 body {
     margin: 0;
     height: auto;
-    background: #222222;
+    background: #424242;
     color: #efefef;
     font-family: sans-serif;
 }
@@ -26,17 +29,49 @@ header{
 header h1{
     margin: 0 0 20px 0;
 }
-
+section{
+    width: 800px;
+    margin: 30px auto;
+}
+.formContainer{
+    //background: #FFFFFF;
+}
+form label{
+    display: inline-block;
+    margin-bottom: .5rem;
+}
+.form-group{
+    margin-bottom: 1em;
+}
+.form-control{
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #464a4c;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+}
+.error{
+    background: #f44336;
+    border: 2px solid #FFF;
+    margin: 20px 0;
+    border-radius: 5px;
+    padding: 10px;
+}
 #canvas-container {
     width: 100%;
     overflow: hidden;
     position: relative;
 }
 
-.zoom {
-    //transform: scale(7);
-    //transform-origin: left top;
-}
 .colorContainer{
     position: absolute;
     bottom: 0;
@@ -167,11 +202,6 @@ div.transbox p {
 }
 #errorContainer {
     display: none;
-    background: #f44336;
-    border: 2px solid #FFF;
-    margin: 20px 0;
-    border-radius: 5px;
-    padding: 10px;
 }
 #errorContainer p {
     font-size: 1.1em;
@@ -191,7 +221,7 @@ div.transbox p {
     border: none;
     padding: 10px;
     border-radius: 5px;
-    margin: 0 5px 5px 5px;
+    margin: 0 5px 5px 0;
     color: #FFF;
     font-weight: bold;
     background: #00bcd4;

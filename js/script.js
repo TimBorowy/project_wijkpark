@@ -21,6 +21,7 @@ function sizeLayouts() {
 * Game
 * */
 
+// get canvas and set initial canvas state
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
@@ -35,13 +36,17 @@ let colors = [
     {name: 'black', hexCode: '#000', light: false},
     {name: 'white', hexCode: '#FFF', light: true}
 ];
+
 // set initial color
 let selectedColor = colors[0];
+
 // canvas zoom level
 let canvasScale = 8;
+
 // amount of initial pixels you can place
 let pixels = 5;
 
+// set canvas zoom level
 canvas.style.transform = 'scale('+ canvasScale+')'
 canvas.style.transformOrigin = 'left top'
 
@@ -53,6 +58,7 @@ for (let color of colors) {
     button.classList.add("colorButton");
     button.style.backgroundColor = color.hexCode;
 
+    // use a light font color on a dark background
     if (color.light) {
         button.style.color = '#2e2e2e';
     }
@@ -62,6 +68,7 @@ for (let color of colors) {
 
 // add event listeners to those buttons
 for (let colorButton of document.querySelectorAll('.colorButton')) {
+
     colorButton.addEventListener('click', function (e) {
         selectedColor = this.style.backgroundColor;
         console.log(selectedColor)
@@ -76,7 +83,8 @@ scanner.addListener('scan', function (content) {
     console.log(content);
 
     // check if qr code is valid
-    if(content == "park_pole1"){
+    if(content === "park_pole1"){
+        // add 5 pixels
         pixels +=5
         console.log(pixels)
 
@@ -99,7 +107,7 @@ canvas.addEventListener('mousedown', function (event) {
         pixels--
         console.log(pixels)
 
-        if (pixels == 0) {
+        if (pixels === 0) {
             alert('je pixels zijn op! Open de scanner. ')
         }
     }
@@ -109,9 +117,10 @@ document.getElementById('findQRCodes').addEventListener('click', launchCameraHan
 document.getElementById('closeScanner').addEventListener('click', closeScanner)
 
 // launch camera and view
-function launchCameraHandler(e) {
+function launchCameraHandler() {
     Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {
+            // if a second camera is available (usually the back camera on mobile)
             if(cameras[1]){
                 scanner.start(cameras[1]);
             } else{
@@ -165,17 +174,24 @@ document.addEventListener('keydown', function (event) {
     let moveX
     let moveY
 
+    // when you touch the screen
     document.addEventListener('touchstart', function (e) {
+        // save initial movement start position
         start.x = e.touches[0].clientX
         start.y = e.touches[0].clientY
+
+        // save initial element position
         start.elemX = parseInt(canvas.style.left, 10)
         start.elemY = parseInt(canvas.style.top, 10)
     })
 
+    // when you move your finger
     document.addEventListener('touchmove', function (e) {
+        // event position
         moveX = e.touches[0].clientX
         moveY = e.touches[0].clientY
 
+        // move the canvas with your finger
         canvas.style.left = start.elemX - (start.x - moveX) + 'px'
         canvas.style.top = start.elemY - (start.y - moveY) + 'px'
     })
